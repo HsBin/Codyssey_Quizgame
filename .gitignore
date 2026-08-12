@@ -1,1 +1,14 @@
-#gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Virtual Environment
+venv/
+.venv/
