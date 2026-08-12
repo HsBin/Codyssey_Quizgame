@@ -322,6 +322,13 @@ class QuizGame:
 
             self.quizzes = []
 
+            #파일은 있지만, 저장된 퀴즈 데이터가 없을때
+            if len(quizzes_data) == 0:
+                print("⚠️ 저장된 퀴즈가 없어 기본 퀴즈를 불러옵니다.")
+                self.quizzes = self.get_default_quizzes()
+                self.save_state()
+                return
+            
             for quiz_data in quizzes_data:
                 quiz = Quiz(
                     quiz_data["question"],
