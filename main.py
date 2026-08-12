@@ -367,3 +367,56 @@ class QuizGame:
             self.best_total = 0
 
             self.save_state()
+
+
+    #퀴즈 게임 스타트 하는 함수.
+    def run(self):
+        while True:
+            self.display_menu()
+
+            choice = self.get_number_input(
+                "선택: ",
+                1,
+                5
+            )
+
+            if choice == 1:
+                self.play_quiz()
+
+            elif choice == 2:
+                self.add_quiz()
+
+            elif choice == 3:
+                self.show_quiz_list()
+
+            elif choice == 4:
+                self.show_best_score()
+
+            elif choice == 5:
+                self.save_state()
+                print("\n💾 데이터를 저장했습니다.")
+                print("👋 퀴즈 게임을 종료합니다.")
+                break
+
+#main함수(객체생성하고 실행하는 곳)
+def main():
+    game = QuizGame()
+
+    try:
+        game.run()
+
+    except KeyboardInterrupt:
+        print("\n\n⚠️ Ctrl+C가 입력되었습니다.")
+        print("💾 데이터를 저장하고 안전하게 종료합니다.")
+
+        game.save_state()
+
+    except EOFError:
+        print("\n\n⚠️ 입력 스트림이 종료되었습니다.")
+        print("💾 데이터를 저장하고 안전하게 종료합니다.")
+
+        game.save_state()
+
+
+if __name__ == "__main__":
+    main()
