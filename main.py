@@ -120,3 +120,103 @@ class QuizGame:
         print("4. 점수 확인")
         print("5. 종료")
         print("=" * 40)
+
+    #퀴즈를 실행하는 함수
+    def play_quiz(self):
+        if len(self.quizzes) == 0:
+            print("\n⚠️ 등록된 퀴즈가 없습니다.")
+            return
+
+        quizzes = self.quizzes.copy()
+
+        # 보너스 기능: 랜덤 출제
+        random.shuffle(quizzes)
+
+        print()
+        print(f"📝 퀴즈를 시작합니다! (총 {len(quizzes)}문제)")
+
+        correct_count = 0
+
+        #문제 출력 및 정답 입력받기.
+        for index, quiz in enumerate(quizzes, start=1):
+            print(f"\n[문제 {index}/{len(quizzes)}]")
+
+            quiz.display()
+
+            answer = self.get_number_input(
+                "\n정답 입력 (1-4): ",
+                1,
+                4
+            )
+
+            if quiz.check_answer(answer):
+                print("✅ 정답입니다!")
+                correct_count += 1
+            else:
+                print("❌ 오답입니다!")
+                print(
+                    f"정답은 {quiz.answer}번 "
+                    f"'{quiz.choices[quiz.answer - 1]}'입니다."
+                )
+	#점수 계산. 100점 만점
+        total = len(quizzes)
+        score = int(correct_count / total * 100)
+
+        print()
+        print("=" * 40)
+        print(
+            f"🏆 결과: {total}문제 중 "
+            f"{correct_count}문제 정답! ({score}점)"
+        )
+	
+	#기존의 최고점수가 없거나 더 높을 때 갱신.
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            self.best_correct = correct_count
+            self.best_total = total
+
+            print("🎉 새로운 최고 점수입니다!")
+
+            self.save_state()
+
+        print("=" * 40)
+    
+    #퀴즈 추가 함수
+    def add_quiz(self):
+        print()
+        print("📌 새로운 퀴즈를 추가합니다.")
+
+        question = self.get_text_input(
+            "\n문제를 입력하세요: "
+        )
+
+        choices = []
+
+	#선택지 입력받기.
+        for i in range(1, 5):
+            choice = self.get_text_input(
+                f"선택지 {i}: "
+            )
+            choices.append(choice)
+
+	#정답 입력받기.
+        answer = self.get_number_input(
+            "정답 번호 (1-4): ",
+            1,
+            4
+        )
+
+	#딕셔너리 형태로 퀴즈 데이터 초기화.
+        new_quiz = Quiz(
+            question,
+            choices,
+            answer
+        )
+
+	#퀴즈 추가
+        self.quizzes.append(new_quiz)
+
+	#저장함수 호출
+        self.save_state()
+
+        print("\n✅ 퀴즈가 추가되었습니다!")
