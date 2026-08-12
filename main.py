@@ -121,43 +121,6 @@ class QuizGame:
         print("5. 종료")
         print("=" * 40)
 
-    #퀴즈를 실행하는 함수
-    def play_quiz(self):
-        if len(self.quizzes) == 0:
-            print("\n⚠️ 등록된 퀴즈가 없습니다.")
-            return
-
-        quizzes = self.quizzes.copy()
-
-        # 보너스 기능: 랜덤 출제
-        random.shuffle(quizzes)
-
-        print()
-        print(f"📝 퀴즈를 시작합니다! (총 {len(quizzes)}문제)")
-
-        correct_count = 0
-
-        #문제 출력 및 정답 입력받기.
-        for index, quiz in enumerate(quizzes, start=1):
-            print(f"\n[문제 {index}/{len(quizzes)}]")
-
-            quiz.display()
-
-            answer = self.get_number_input(
-                "\n정답 입력 (1-4): ",
-                1,
-                4
-            )
-
-            if quiz.check_answer(answer):
-                print("✅ 정답입니다!")
-                correct_count += 1
-            else:
-                print("❌ 오답입니다!")
-                print(
-                    f"정답은 {quiz.answer}번 "
-                    f"'{quiz.choices[quiz.answer - 1]}'입니다."
-                )
 	#점수 계산. 100점 만점
         total = len(quizzes)
         score = int(correct_count / total * 100)
