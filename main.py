@@ -67,3 +67,56 @@ class QuizGame:
                 2
             )
         ]
+
+    #숫자를 입력받는 함수(최소~최대 숫자가 정해져있음).
+    def get_number_input(self, message, minimum, maximum):
+        while True:
+            try:
+                value = input(message).strip()
+
+                if value == "":
+                    print(
+                        f"⚠️ 빈 입력은 사용할 수 없습니다. "
+                        f"{minimum}-{maximum} 사이의 숫자를 입력하세요."
+                    )
+                    continue
+
+                number = int(value)
+
+                if number < minimum or number > maximum:
+                    print(
+                        f"⚠️ {minimum}-{maximum} 사이의 숫자를 입력하세요."
+                    )
+                    continue
+
+                return number
+
+            except ValueError:
+                print(
+                    f"⚠️ 숫자만 입력할 수 있습니다. "
+                    f"{minimum}-{maximum} 사이의 숫자를 입력하세요."
+                )
+
+    #메시지를 입력받는 함수.(빈 내용X)
+    def get_text_input(self, message):
+        while True:
+            text = input(message).strip()
+
+            if text == "":
+                print("⚠️ 빈 내용은 입력할 수 없습니다.")
+                continue
+
+            return text
+    
+    #퀴즈 메뉴를 출력하는 함수
+    def display_menu(self):
+        print()
+        print("=" * 40)
+        print("        🎮 게임 상식 퀴즈 🎮")
+        print("=" * 40)
+        print("1. 퀴즈 풀기")
+        print("2. 퀴즈 추가")
+        print("3. 퀴즈 목록")
+        print("4. 점수 확인")
+        print("5. 종료")
+        print("=" * 40)
