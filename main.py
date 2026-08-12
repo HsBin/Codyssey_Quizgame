@@ -294,3 +294,76 @@ class QuizGame:
                 f"⚠️ 데이터를 저장하는 중 "
                 f"오류가 발생했습니다: {error}"
             )
+
+
+    #state 데이터 가져오는 함수
+    def load_state(self):
+	#state저장하는 파일이 없을 때
+        if not os.path.exists(STATE_FILE):
+            print("📂 저장 파일이 없어 기본 퀴즈를 생성합니다.")
+
+            self.quizzes = self.get_default_quizzes()
+            self.best_score = None
+            self.best_correct = 0
+            self.best_total = 0
+
+            self.save_state()
+            return
+
+        try:
+            with open(
+                STATE_FILE,
+                "r",
+                encoding="utf-8"
+            ) as file:
+
+                data = json.load(file)
+
+            quizzes_data = data.get("quizzes", [])
+
+            self.quizzes = []
+
+            for quiz_data in quizzes_data:
+                quiz = Quiz(
+                    quiz_data["question"],
+                    quiz_data["choices"],
+                    quiz_data["answer"]
+                )
+
+                self.quizzes.append(quiz)
+	    
+	    #가져온 데이터로 최고 점수 관련 데이터 초기화.
+            self.best_score = data.get("best_score")
+            self.best_correct = data.get("best_correct", 0)
+            self.best_total = data.get("best_total", 0)
+
+	    #저장된 퀴즈 개수와 최고점수(없을 시 없다고 출력) 함께 출력
+            print(
+                "📂 저장된 데이터를 불러왔습니다. "
+                f"(퀴즈 {len(self.quizzes)}개"
+                f", 최고점수 "
+                f"{self.best_score if self.best_score is not None else '없음'})"
+            )
+	#예외처리
+        except (
+            json.JSONDecodeError,
+            OSError,
+            KeyError,
+            TypeError
+        ) as error:
+
+            print(
+                "⚠️ 저장 파일이 손상되었거나 "
+                "읽을 수 없습니다."
+            )
+            print(
+                "기본 퀴즈 데이터로 복구합니다."
+            )
+
+	    #저장 파일에 문제 있을 시 기본 퀴즈 데이터로 복구.
+            self.quizzes = self.get_default_quizzes()
+            self.best_score = None
+            self.best_correct = 0
+            self.best_total = 0
+
+            self.save_state()
