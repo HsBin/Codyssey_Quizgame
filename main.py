@@ -220,3 +220,77 @@ class QuizGame:
         self.save_state()
 
         print("\n✅ 퀴즈가 추가되었습니다!")
+
+
+    #퀴즈 목록 출력
+    def show_quiz_list(self):
+        print()
+
+	#등록된 퀴즈 없을 때
+        if len(self.quizzes) == 0:
+            print("⚠️ 등록된 퀴즈가 없습니다.")
+            return
+
+	#퀴즈 총 개수 출력
+        print(
+            f"📋 등록된 퀴즈 목록 "
+            f"(총 {len(self.quizzes)}개)"
+        )
+
+        print("-" * 40)
+	
+	#퀴즈 1번부터 문제 출력
+        for index, quiz in enumerate(self.quizzes, start=1):
+            print(f"[{index}] {quiz.question}")
+
+        print("-" * 40)
+
+    #현재 최고점수 출력
+    def show_best_score(self):
+        print()
+
+        #최고점수가 존재하지 않을 때
+	if self.best_score is None:
+            print("🏆 아직 퀴즈를 풀지 않았습니다.")
+            return
+	
+	#최고점수와 문제 개수, 정답 문제 개수 출력
+        print(
+            f"🏆 최고 점수: {self.best_score}점 "
+            f"({self.best_total}문제 중 "
+            f"{self.best_correct}문제 정답)"
+        )
+
+    #state에 저장 하는 함수
+    def save_state(self):
+        #데이터 딕셔너리 형태로 변환해서 초기화
+	data = {
+            "quizzes": [
+                quiz.to_dict()
+                for quiz in self.quizzes
+            ],
+            "best_score": self.best_score,
+            "best_correct": self.best_correct,
+            "best_total": self.best_total
+        }
+
+	#오류발생 대비 try구문
+        try:
+            with open(
+                STATE_FILE,
+                "w",
+                encoding="utf-8"
+            ) as file:
+
+                json.dump(
+                    data,
+                    file,
+                    ensure_ascii=False,
+                    indent=4
+                )
+	#오류 발생 함수 사용. OS,Type
+        except (OSError, TypeError) as error:
+            print(
+                f"⚠️ 데이터를 저장하는 중 "
+                f"오류가 발생했습니다: {error}"
+            )
