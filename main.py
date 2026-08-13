@@ -6,10 +6,12 @@ STATE_FILE = "state.json"
 
 #Quiz 클래스, 퀴즈 1개의 역할
 class Quiz:
-    def __init__(self, question, choices, answer):
+    #보너스 기능3 위한 hint 매개변수 추가.
+    def __init__(self, question, choices, answer, hint=""):
         self.question = question
         self.choices = choices
         self.answer = answer
+        self.hint = hint
 
     def display(self):
         print("\n" + "-" * 40)
@@ -25,7 +27,8 @@ class Quiz:
         return {
             "question": self.question,
             "choices": self.choices,
-            "answer": self.answer
+            "answer": self.answer,
+            "hint": self.hint           #보너스 기능3 위한 "hint" 데이터 추가.
         }
 
 #QuizGame을 진행하는 class
@@ -38,33 +41,38 @@ class QuizGame:
 
         self.load_state()
     
-#기본 퀴즈 반환(주제: 게임)
+    #기본 퀴즈 반환 함수(주제: 게임)
     def get_default_quizzes(self):
         return [
             Quiz(
                 "마인크래프트를 개발한 인물은 누구일까요?",
                 ["게이브 뉴웰", "마르쿠스 페르손", "토비 폭스", "시드 마이어"],
-                2
+                2,
+                "Notch라는 닉네임으로 알려진 개발자입니다."
             ),
             Quiz(
                 "리그 오브 레전드를 개발한 회사는?",
                 ["Valve", "Blizzard", "Riot Games", "Nintendo"],
-                3
+                3,
+                "발로란트를 개발한 회사이기도 합니다."
             ),
             Quiz(
                 "언리얼 엔진을 개발한 회사는?",
                 ["Epic Games", "Unity Technologies", "Valve", "Ubisoft"],
-                1
+                1,
+                "포트나이트를 개발한 회사입니다."
             ),
             Quiz(
                 "스타듀 밸리의 개발자는?",
                 ["Eric Barone", "Markus Persson", "Hideo Kojima", "Shigeru Miyamoto"],
-                1
+                1,
+                "ConcernedApe라는 이름으로도 활동합니다."
             ),
             Quiz(
                 "젤다의 전설 시리즈를 제작한 게임 회사는?",
                 ["Sony", "Nintendo", "Microsoft", "Capcom"],
-                2
+                2,
+                "마리오 시리즈를 제작한 회사이기도 합니다."
             )
         ]
 
@@ -145,13 +153,28 @@ class QuizGame:
         print()
         print(f"📝 퀴즈를 시작합니다! (총 {len(quizzes)}문제)")
 
+        #정답 개수, 힌트 사용 개수
         correct_count = 0
+        hint_count = 0
 
         #문제 출력 및 정답 입력받기.
         for index, quiz in enumerate(quizzes, start=1):
             print(f"\n[문제 {index}/{len(quizzes)}]")
 
             quiz.display()
+
+            use_hint = self.get_number_input(
+                "\n힌트를 보시겠습니까? (1. 예 / 2. 아니오): ",
+                1,
+                2
+            )
+
+            if use_hint == 1:
+                if quiz.hint:
+                    print(f"💡 힌트: {quiz.hint}")
+                    hint_count += 1
+                else:
+                    print("⚠️ 등록된 힌트가 없습니다.")
 
             answer = self.get_number_input(
                 "\n정답 입력 (1-4): ",
@@ -168,9 +191,17 @@ class QuizGame:
                     f"정답은 {quiz.answer}번 "
                     f"'{quiz.choices[quiz.answer - 1]}'입니다."
                 )
-    #점수 계산. 100점 만점
+        #점수 계산. 100점 만점
         total = len(quizzes)
         score = int(correct_count / total * 100)
+
+        #hint 사용개수 * 5 만큼 패널티 점수 부여
+        hint_penalty = hint_count * 5
+        score -= hint_penalty
+
+        #최종점수가 음수라면, 0으로 초기화.
+        if score < 0:
+            score = 0
 
         print()
         print("=" * 40)
@@ -178,8 +209,15 @@ class QuizGame:
             f"🏆 결과: {total}문제 중 "
             f"{correct_count}문제 정답! ({score}점)"
         )
+
+        #힌트 사용한 적 있으면, 추가로 힌트 사용횟수와 차감점수 출력
+        if hint_count > 0:
+            print(
+                f"💡 힌트 {hint_count}회 사용 "
+                f"(-{hint_penalty}점)"
+            )
     
-    #기존의 최고점수가 없거나 더 높을 때 갱신.
+        #기존의 최고점수가 없거나 더 높을 때 갱신.
         if self.best_score is None or score > self.best_score:
             self.best_score = score
             self.best_correct = correct_count
@@ -202,46 +240,52 @@ class QuizGame:
 
         choices = []
 
-    #선택지 입력받기.
+        #선택지 입력받기.
         for i in range(1, 5):
             choice = self.get_text_input(
                 f"선택지 {i}: "
             )
             choices.append(choice)
 
-    #정답 입력받기.
+        #정답 입력받기.
         answer = self.get_number_input(
             "정답 번호 (1-4): ",
             1,
             4
         )
 
-    #딕셔너리 형태로 퀴즈 데이터 초기화.
+        #힌트 입력받기
+        hint = self.get_text_input(
+            "힌트를 입력하세요: "
+        )
+
+        #딕셔너리 형태로 퀴즈 데이터 초기화.
         new_quiz = Quiz(
             question,
             choices,
-            answer
+            answer,
+            hint
         )
 
-    #퀴즈 추가
+        #퀴즈 추가
         self.quizzes.append(new_quiz)
 
-    #저장함수 호출
+        #저장함수 호출
         self.save_state()
 
         print("\n✅ 퀴즈가 추가되었습니다!")
 
 
-    #퀴즈 목록 출력
+    #퀴즈 목록 출력 함수
     def show_quiz_list(self):
         print()
 
-    #등록된 퀴즈 없을 때
+        #등록된 퀴즈 없을 때
         if len(self.quizzes) == 0:
             print("⚠️ 등록된 퀴즈가 없습니다.")
             return
 
-    #퀴즈 총 개수 출력
+        #퀴즈 총 개수 출력
         print(
             f"📋 등록된 퀴즈 목록 "
             f"(총 {len(self.quizzes)}개)"
@@ -249,13 +293,13 @@ class QuizGame:
 
         print("-" * 40)
     
-    #퀴즈 1번부터 문제 출력
+        #퀴즈 1번부터 문제 출력
         for index, quiz in enumerate(self.quizzes, start=1):
             print(f"[{index}] {quiz.question}")
 
         print("-" * 40)
 
-    #현재 최고점수 출력
+    #현재 최고점수 출력 함수
     def show_best_score(self):
         print()
 
@@ -264,7 +308,7 @@ class QuizGame:
             print("🏆 아직 퀴즈를 풀지 않았습니다.")
             return
     
-    #최고점수와 문제 개수, 정답 문제 개수 출력
+        #최고점수와 문제 개수, 정답 문제 개수 출력
         print(
             f"🏆 최고 점수: {self.best_score}점 "
             f"({self.best_total}문제 중 "
@@ -297,7 +341,7 @@ class QuizGame:
                     ensure_ascii=False,
                     indent=4
                 )
-    #오류 발생 함수 사용. OS,Type
+        #오류 발생 함수 사용. OS,Type
         except (OSError, TypeError) as error:
             print(
                 f"⚠️ 데이터를 저장하는 중 "
@@ -307,7 +351,7 @@ class QuizGame:
 
     #state 데이터 가져오는 함수
     def load_state(self):
-    #state저장하는 파일이 없을 때
+        #state저장하는 파일이 없을 때
         if not os.path.exists(STATE_FILE):
             print("📂 저장 파일이 없어 기본 퀴즈를 생성합니다.")
 
@@ -343,24 +387,25 @@ class QuizGame:
                 quiz = Quiz(
                     quiz_data["question"],
                     quiz_data["choices"],
-                    quiz_data["answer"]
+                    quiz_data["answer"],
+                    quiz_data["hint", ""] #hint가 있으면 가져오고 hint가 없으면 "" 사용.
                 )
 
                 self.quizzes.append(quiz)
         
-        #가져온 데이터로 최고 점수 관련 데이터 초기화.
+            #가져온 데이터로 최고 점수 관련 데이터 초기화.
             self.best_score = data.get("best_score")
             self.best_correct = data.get("best_correct", 0)
             self.best_total = data.get("best_total", 0)
 
-        #저장된 퀴즈 개수와 최고점수(없을 시 없다고 출력) 함께 출력
+            #저장된 퀴즈 개수와 최고점수(없을 시 없다고 출력) 함께 출력
             print(
                 "📂 저장된 데이터를 불러왔습니다. "
                 f"(퀴즈 {len(self.quizzes)}개"
                 f", 최고점수 "
                 f"{self.best_score if self.best_score is not None else '없음'})"
             )
-    #예외처리
+        #예외처리
         except (
             json.JSONDecodeError,
             OSError,
@@ -376,7 +421,7 @@ class QuizGame:
                 "기본 퀴즈 데이터로 복구합니다."
             )
 
-        #저장 파일에 문제 있을 시 기본 퀴즈 데이터로 복구.
+            #저장 파일에 문제 있을 시 기본 퀴즈 데이터로 복구.
             self.quizzes = self.get_default_quizzes()
             self.best_score = None
             self.best_correct = 0
