@@ -129,8 +129,18 @@ class QuizGame:
 
         quizzes = self.quizzes.copy()
 
-        # 보너스 기능: 랜덤 출제
+        # 풀 문제 수 선택(보너스 기능2 관련)
+        quiz_count = self.get_number_input(
+            f"\n몇 문제를 풀겠습니까? (1-{len(quizzes)}): ",
+            1,
+            len(quizzes)
+        )
+
+        # 보너스 기능1: 랜덤 출제
         random.shuffle(quizzes)
+
+        # 선택한 문제 수만 사용
+        quizzes = quizzes[:quiz_count]
 
         print()
         print(f"📝 퀴즈를 시작합니다! (총 {len(quizzes)}문제)")
