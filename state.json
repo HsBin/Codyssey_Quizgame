@@ -1,0 +1,88 @@
+{
+    "quizzes": [
+        {
+            "question": "마인크래프트를 개발한 인물은 누구일까요?",
+            "choices": [
+                "게이브 뉴웰",
+                "마르쿠스 페르손",
+                "토비 폭스",
+                "시드 마이어"
+            ],
+            "answer": 2,
+            "hint": "Notch라는 닉네임으로 알려진 개발자입니다."
+        },
+        {
+            "question": "리그 오브 레전드를 개발한 회사는?",
+            "choices": [
+                "Valve",
+                "Blizzard",
+                "Riot Games",
+                "Nintendo"
+            ],
+            "answer": 3,
+            "hint": "발로란트를 개발한 회사이기도 합니다."
+        },
+        {
+            "question": "언리얼 엔진을 개발한 회사는?",
+            "choices": [
+                "Epic Games",
+                "Unity Technologies",
+                "Valve",
+                "Ubisoft"
+            ],
+            "answer": 1,
+            "hint": "포트나이트를 개발한 회사입니다."
+        },
+        {
+            "question": "스타듀 밸리의 개발자는?",
+            "choices": [
+                "Eric Barone",
+                "Markus Persson",
+                "Hideo Kojima",
+                "Shigeru Miyamoto"
+            ],
+            "answer": 1,
+            "hint": "ConcernedApe라는 이름으로도 활동합니다."
+        },
+        {
+            "question": "젤다의 전설 시리즈를 제작한 게임 회사는?",
+            "choices": [
+                "Sony",
+                "Nintendo",
+                "Microsoft",
+                "Capcom"
+            ],
+            "answer": 2,
+            "hint": "마리오 시리즈를 제작한 회사이기도 합니다."
+        }
+    ],
+    "best_score": 100,
+    "best_correct": 2,
+    "best_total": 2,
+    "score_history": [
+        {
+            "date": "2026-08-13 10:23:31",
+            "score": 100,
+            "correct": 2,
+            "total": 2
+        },
+        {
+            "date": "2026-08-13 10:23:53",
+            "score": 75,
+            "correct": 3,
+            "total": 4
+        },
+        {
+            "date": "2026-08-13 10:24:07",
+            "score": 90,
+            "correct": 2,
+            "total": 2
+        },
+        {
+            "date": "2026-08-13 10:34:16",
+            "score": 45,
+            "correct": 1,
+            "total": 2
+        }
+    ]
+}
