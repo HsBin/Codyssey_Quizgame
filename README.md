@@ -359,6 +359,18 @@ git log --oneline --graph --all
 
 ![Git Log](docs/screenshots/git_log.png)
 
+```bash
+git clone (주소)
+```
+
+![Git clone](docs/screenshots/git_clone.png)
+
+```bash
+git pull origin main
+```
+
+![Git pull](docs/screenshots/git_pull.png)
+
 
 ## 📚 프로젝트를 통해 학습한 내용
 
