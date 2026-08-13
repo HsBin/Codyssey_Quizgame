@@ -315,28 +315,35 @@ Git을 통해 기능 단위로 변경사항을 기록하고 브랜치를 이용�
 
 ### 메뉴 화면
 
-<!-- 실행 화면 캡처 후 아래 경로에 추가 -->
-<!-- ![메뉴 화면](docs/screenshots/menu.png) -->
+![메뉴 화면](docs/screenshots/menu.png) 
 
 
 ### 퀴즈 풀기
 
-<!-- ![퀴즈 풀기](docs/screenshots/play.png) -->
+![퀴즈 풀기](docs/screenshots/play.png)
 
 
 ### 퀴즈 추가
 
-<!-- ![퀴즈 추가](docs/screenshots/add_quiz.png) -->
+![퀴즈 추가](docs/screenshots/add_quiz.png)
 
 
 ### 퀴즈 목록
 
-<!-- ![퀴즈 목록](docs/screenshots/quiz_list.png) -->
+![퀴즈 목록](docs/screenshots/list_quiz.png)
 
 
 ### 최고 점수 확인
 
-<!-- ![점수 확인](docs/screenshots/score.png) -->
+![점수 확인](docs/screenshots/score.png)
+
+### 퀴즈 제거
+
+![퀴즈 목록](docs/screenshots/delete_quiz.png)
+
+### 종료
+
+![퀴즈 목록](docs/screenshots/exit.png)
 
 
 ## 🔀 Git 작업 기록
@@ -347,8 +354,7 @@ Git을 통해 기능 단위로 변경사항을 기록하고 브랜치를 이용�
 git log --oneline --graph --all
 ```
 
-<!-- 최종 캡처 후 사용 -->
-<!-- ![Git Log](docs/screenshots/git_log.png) -->
+![Git Log](docs/screenshots/git_log.png)
 
 
 ## 📚 프로젝트를 통해 학습한 내용
