@@ -126,7 +126,8 @@ class QuizGame:
         print("2. 퀴즈 추가")
         print("3. 퀴즈 목록")
         print("4. 점수 확인")
-        print("5. 종료")
+        print("5. 퀴즈 삭제")
+        print("6. 종료")
         print("=" * 40)
 
     #퀴즈를 실행하는 함수
@@ -299,6 +300,34 @@ class QuizGame:
 
         print("-" * 40)
 
+    # 등록된 퀴즈를 삭제하는 함수
+    def delete_quiz(self):
+        # 퀴즈가 없는 경우
+        if len(self.quizzes) == 0:
+            print("\n⚠️ 삭제할 퀴즈가 없습니다.")
+            return
+
+        # 현재 퀴즈 목록 출력
+        self.show_quiz_list()
+
+        # 삭제할 퀴즈 번호 입력
+        quiz_number = self.get_number_input(
+            f"삭제할 퀴즈 번호 (1-{len(self.quizzes)}): ",
+            1,
+            len(self.quizzes)
+        )
+
+        # 리스트의 인덱스는 0부터 시작하므로 -1, 해당 위치 데이터 제거하면서, 제거한 데이터 반환
+        deleted_quiz = self.quizzes.pop(quiz_number - 1)
+
+        # 삭제된 상태를 파일에 저장
+        self.save_state()
+
+        print(
+            f"\n🗑️ '{deleted_quiz.question}' "
+            f"퀴즈가 삭제되었습니다."
+        )
+
     #현재 최고점수 출력 함수
     def show_best_score(self):
         print()
@@ -388,7 +417,7 @@ class QuizGame:
                     quiz_data["question"],
                     quiz_data["choices"],
                     quiz_data["answer"],
-                    quiz_data["hint", ""] #hint가 있으면 가져오고 hint가 없으면 "" 사용.
+                    quiz_data.get("hint", "") #hint가 있으면 가져오고 hint가 없으면 "" 사용.
                 )
 
                 self.quizzes.append(quiz)
@@ -417,6 +446,7 @@ class QuizGame:
                 "⚠️ 저장 파일이 손상되었거나 "
                 "읽을 수 없습니다."
             )
+            print(f"오류 내용: {error}")
             print(
                 "기본 퀴즈 데이터로 복구합니다."
             )
@@ -438,7 +468,7 @@ class QuizGame:
             choice = self.get_number_input(
                 "선택: ",
                 1,
-                5
+                6
             )
 
             if choice == 1:
@@ -454,6 +484,9 @@ class QuizGame:
                 self.show_best_score()
 
             elif choice == 5:
+                self.delete_quiz()
+
+            elif choice == 6:
                 self.save_state()
                 print("\n💾 데이터를 저장했습니다.")
                 print("👋 퀴즈 게임을 종료합니다.")
