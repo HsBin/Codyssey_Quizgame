@@ -11,7 +11,7 @@ Python 기본 문법과 객체 지향 프로그래밍, JSON 파일 입출력, Gi
 
 - 프로젝트명: 게임 상식 퀴즈 게임
 - 개발 언어: Python
-- 실행 환경: Python 3.10 이상
+- 실행 환경: Python 3.9.6
 - 프로그램 형태: 콘솔 프로그램
 - 데이터 저장 방식: JSON
 - 데이터 파일: `state.json`
@@ -21,6 +21,9 @@ Python 기본 문법과 객체 지향 프로그래밍, JSON 파일 입출력, Gi
   - `os`
   - `random`
 
+### 실행 환경
+
+![실행 환경](docs/screenshots/development_environment.png)
 
 ## 🎯 퀴즈 주제 및 선정 이유
 
