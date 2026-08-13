@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from datetime import datetime #표준라이브러리라서 외부라이브러리 금지조건에도 문제없음.
 
 STATE_FILE = "state.json"
 
@@ -12,6 +13,8 @@ class Quiz:
         self.choices = choices
         self.answer = answer
         self.hint = hint
+
+
 
     def display(self):
         print("\n" + "-" * 40)
@@ -38,6 +41,7 @@ class QuizGame:
         self.best_score = None
         self.best_correct = 0
         self.best_total = 0
+        self.score_history = [] #보너스기능5 점수기록 히스토리
 
         self.load_state()
     
@@ -204,6 +208,17 @@ class QuizGame:
         if score < 0:
             score = 0
 
+        # 보너스기능5 - 현재 게임 결과를 기록(딕셔너리 형태로)
+        record = {
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "score": score,
+            "correct": correct_count,
+            "total": total
+        }
+
+        #보너스기능5 - 리스트로 추가.
+        self.score_history.append(record)
+
         print()
         print("=" * 40)
         print(
@@ -226,7 +241,8 @@ class QuizGame:
 
             print("🎉 새로운 최고 점수입니다!")
 
-            self.save_state()
+        #보너스 기능5 - 최고기록에 상관없이 게임 기록 저장하도록 변경 (원래는 최고기록갱신때만 저장했음.)
+        self.save_state()
 
         print("=" * 40)
     
@@ -344,6 +360,22 @@ class QuizGame:
             f"{self.best_correct}문제 정답)"
         )
 
+        #점수 기록 출력
+        print("\n📊 게임 기록")
+        print("-" * 40)
+
+        for index, record in enumerate(self.score_history, start=1):
+            print(
+                f"[{index}] {record['date']} | "
+                f"{record['score']}점 | "
+                f"{record['total']}문제 중 "
+                f"{record['correct']}문제 정답"
+            )
+
+        print("-" * 40)
+
+
+
     #state에 저장 하는 함수
     def save_state(self):
         #데이터 딕셔너리 형태로 변환해서 초기화
@@ -354,7 +386,8 @@ class QuizGame:
             ],
             "best_score": self.best_score,
             "best_correct": self.best_correct,
-            "best_total": self.best_total
+            "best_total": self.best_total,
+            "score_history": self.score_history # 보너스기능5 - 점수 역사 기록위한 데이터
         }
         #오류발생 대비 try구문
         try:
@@ -388,6 +421,7 @@ class QuizGame:
             self.best_score = None
             self.best_correct = 0
             self.best_total = 0
+            self.score_history = []
 
             self.save_state()
             return
@@ -426,6 +460,7 @@ class QuizGame:
             self.best_score = data.get("best_score")
             self.best_correct = data.get("best_correct", 0)
             self.best_total = data.get("best_total", 0)
+            self.score_history = data.get("score_history", [])
 
             #저장된 퀴즈 개수와 최고점수(없을 시 없다고 출력) 함께 출력
             print(
@@ -446,7 +481,6 @@ class QuizGame:
                 "⚠️ 저장 파일이 손상되었거나 "
                 "읽을 수 없습니다."
             )
-            print(f"오류 내용: {error}")
             print(
                 "기본 퀴즈 데이터로 복구합니다."
             )
@@ -456,6 +490,7 @@ class QuizGame:
             self.best_score = None
             self.best_correct = 0
             self.best_total = 0
+            self.score_history = []
 
             self.save_state()
 
